@@ -1,4 +1,3 @@
-// '../audio/game_ended.wav'
 
 const audioPlayer = ({ audioPath, volume }) => {
   const audio = new Audio(audioPath);
