@@ -1,4 +1,4 @@
-import { showInputModal } from "./views/modal.mjs";
+import { showInputModal, showMessageModal, showResultsModal } from "./views/modal.mjs";
 import { appendRoomElement, updateNumberOfUsersInRoom } from "./views/room.mjs";
 import {
   appendUserElement,
@@ -10,11 +10,9 @@ import {
   addClass,
   removeAllChildren,
 } from "./helpers/domHelper.mjs";
-import { getRandomText } from "./helpers/apiHelper.mjs";
 import { clientErrorHandler } from "./utils/errorHandler.mjs";
 import { Events } from "./enums/events.enum.mjs";
 import { audioPlayer } from "./utils/audioPlayer.mjs";
-import { showMessageModal, showResultsModal } from "./views/modal.mjs";
 import { getWPM } from "./utils/wpm.mjs";
 
 const username = sessionStorage.getItem("username");
@@ -217,7 +215,9 @@ function endGameEventListener({ roomData }) {
   });
   socket.emit(Events.SEND_RESULTS);
   audioPlayer({ audioPath: "../audio/game_ended.wav", volume: 0.06 });
-  showMessageModal({ message: `your WPM is ${gameData.wpm}` });
+  if(!(!gameData.wpn && gameData.wpn !== 0)) {
+    showMessageModal({ message: `your WPM is ${gameData.wpm}` });
+  }
   document.removeEventListener("keyup", keyUp);
 }
 
@@ -267,7 +267,8 @@ async function startGameSocketEventListener({ randomText }) {
   removeClass(text, "display-none");
   removeClass(gameTimerContainer, "display-none");
 
-  gameData.activeText = await getRandomText(randomText);
+  console.log(randomText);
+  gameData.activeText = randomText;
 
   gameData.startTime = new Date();
 
@@ -282,6 +283,7 @@ function readyUserBtnListener() {
   };
   socket.emit(Events.UPDATE_USER_READY, dataToSend);
 }
+
 socket.on(Events.UPDATE_GAME_TIMER, (timerCount) => {
   gameTimer.innerText = timerCount;
 });

@@ -1,18 +1,12 @@
 import { Router } from "express";
 import path from "path";
 import { HTML_FILES_PATH } from "../config";
-import { texts } from "../data";
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   const page = path.join(HTML_FILES_PATH, "game.html");
   res.sendFile(page);
-});
-
-router.get("/texts/:id", (req, res) => {
-  const id = req.params.id;
-  res.json(texts[id]);
 });
 
 export default router;

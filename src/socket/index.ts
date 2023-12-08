@@ -7,7 +7,8 @@ import {
   SECONDS_TIMER_BEFORE_START_GAME,
   MILLISECONDS_TIMER_BEFORE_START_GAME,
   MAXIMUM_USERS_FOR_ONE_ROOM,
-  SECONDS_FOR_GAME,
+  MILLISECONDS_FOR_GAME,
+  SECONDS_FOR_GAME
 } from "./config";
 import { getRoomsKeysArray } from "../utils/room";
 import { createNewUserInMap, removeUserInMap } from "../helpers/mapHelper";
@@ -29,6 +30,11 @@ const getCurrentRoomId = (
 ) => {
   const arr = getRoomsKeysArray(roomsDetailsMap);
   return arr.find((roomId) => socket.rooms.has(roomId));
+};
+
+const getRandomText = async() => {
+  const response = await fetch("https://loripsum.net/generate.php?p=1&l=short");
+  return (await response.text()).replace(/(<p[^>]+?>|<p>|<\/p>)/img, "");
 };
 
 const getRoomsArray = (map: Map<string, Players>) => {
@@ -167,9 +173,9 @@ export default (io: Server) => {
           timerCount
         );
       }, 1000);
-      setTimeout(() => {
+      setTimeout(async() => {
         clearInterval(beforeGameTimer);
-        const randomText = Math.floor(Math.random() * 7);
+        const randomText = await getRandomText();
         io.to(leaveRoomData.roomId).emit(Events.START_GAME, { randomText });
       }, SECONDS_TIMER_BEFORE_START_GAME);
     });
@@ -206,15 +212,15 @@ export default (io: Server) => {
           timerCount
         );
       }, 1000);
-      setTimeout(() => {
+      setTimeout(async () => {
         clearInterval(beforeGameTimer);
-        const randomText = Math.floor(Math.random() * 7);
+        const randomText = await getRandomText();
         io.to(userReadyData.roomId).emit(Events.START_GAME, { randomText });
       }, SECONDS_TIMER_BEFORE_START_GAME);
     });
 
     socket.on(Events.GAME_SESSION, (gameData) => {
-      let timerCount = SECONDS_FOR_GAME;
+      let timerCount = MILLISECONDS_FOR_GAME;
 
       gameSessionTimer = setInterval(() => {
         timerCount = timerCount - 1;
@@ -240,7 +246,7 @@ export default (io: Server) => {
         });
         roomsToHide = roomsToHide.filter((room) => room !== gameData.roomId);
         io.sockets.emit(Events.UPDATE_ROOMS, getRoomsArray(roomsDetailsMap));
-      }, SECONDS_FOR_GAME * 1000);
+      }, SECONDS_FOR_GAME);
     });
 
     socket.on(Events.SET_TEXT_COMPLETED, (setTextData) => {
@@ -340,9 +346,10 @@ export default (io: Server) => {
           timerCount
         );
       }, 1000);
-      setTimeout(() => {
+
+      setTimeout(async () => {
         clearInterval(beforeGameTimer);
-        const randomText = Math.floor(Math.random() * 7);
+        const randomText = await getRandomText();
         io.to((socketRoom as string)).emit(Events.START_GAME, { randomText });
       }, SECONDS_TIMER_BEFORE_START_GAME);
 
