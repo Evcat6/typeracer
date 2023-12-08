@@ -5,6 +5,7 @@ import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { Players } from "../types/types";
 import {
   SECONDS_TIMER_BEFORE_START_GAME,
+  MILLISECONDS_TIMER_BEFORE_START_GAME,
   MAXIMUM_USERS_FOR_ONE_ROOM,
   SECONDS_FOR_GAME,
 } from "./config";
@@ -157,7 +158,7 @@ export default (io: Server) => {
 
       io.sockets.emit(Events.UPDATE_ROOM_PLAYERS_COUNT, newRoomData);
 
-      let timerCount = SECONDS_TIMER_BEFORE_START_GAME;
+      let timerCount = MILLISECONDS_TIMER_BEFORE_START_GAME;
 
       let beforeGameTimer = setInterval(() => {
         timerCount = timerCount - 1;
@@ -170,7 +171,7 @@ export default (io: Server) => {
         clearInterval(beforeGameTimer);
         const randomText = Math.floor(Math.random() * 7);
         io.to(leaveRoomData.roomId).emit(Events.START_GAME, { randomText });
-      }, SECONDS_TIMER_BEFORE_START_GAME * 1000);
+      }, SECONDS_TIMER_BEFORE_START_GAME);
     });
 
     socket.on(Events.UPDATE_USER_READY, (userReadyData) => {
@@ -196,7 +197,7 @@ export default (io: Server) => {
 
       io.sockets.emit(Events.UPDATE_ROOMS, getRoomsArray(roomsDetailsMap));
 
-      let timerCount = SECONDS_TIMER_BEFORE_START_GAME;
+      let timerCount = MILLISECONDS_TIMER_BEFORE_START_GAME;
 
       let beforeGameTimer = setInterval(() => {
         timerCount = timerCount - 1;
@@ -209,7 +210,7 @@ export default (io: Server) => {
         clearInterval(beforeGameTimer);
         const randomText = Math.floor(Math.random() * 7);
         io.to(userReadyData.roomId).emit(Events.START_GAME, { randomText });
-      }, SECONDS_TIMER_BEFORE_START_GAME * 1000);
+      }, SECONDS_TIMER_BEFORE_START_GAME);
     });
 
     socket.on(Events.GAME_SESSION, (gameData) => {
@@ -330,7 +331,7 @@ export default (io: Server) => {
 
       io.sockets.emit(Events.UPDATE_ROOM_PLAYERS_COUNT, newRoomData);
 
-      let timerCount = SECONDS_TIMER_BEFORE_START_GAME;
+      let timerCount = MILLISECONDS_TIMER_BEFORE_START_GAME;
 
       let beforeGameTimer = setInterval(() => {
         timerCount = timerCount - 1;
@@ -343,7 +344,7 @@ export default (io: Server) => {
         clearInterval(beforeGameTimer);
         const randomText = Math.floor(Math.random() * 7);
         io.to((socketRoom as string)).emit(Events.START_GAME, { randomText });
-      }, SECONDS_TIMER_BEFORE_START_GAME * 1000);
+      }, SECONDS_TIMER_BEFORE_START_GAME);
 
   });
 });}
