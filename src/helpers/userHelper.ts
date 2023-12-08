@@ -5,6 +5,7 @@ const clearUsersTextField = ({ roomData }): void => {
 };
 
 const setUsersUnready = ({ roomData }): void => {
+  if(!roomData.length) return;
   for (const player of roomData) {
     player.ready = false;
   }

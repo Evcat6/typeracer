@@ -13,7 +13,7 @@ app.use(express.static(STATIC_PATH));
 
 routes(app);
 
-app.get("*", (req, res) => res.redirect("/login"));
+app.get("*", (_req, res) => res.redirect("/login"));
 
 socketHandler(socketIo);
 
