@@ -8,7 +8,7 @@ import {
 import {
   removeClass,
   addClass,
-  removeAllChildrens,
+  removeAllChildren,
 } from "./helpers/domHelper.mjs";
 import { getRandomText } from "./helpers/apiHelper.mjs";
 import { clientErrorHandler } from "./utils/errorHandler.mjs";
@@ -154,7 +154,7 @@ function updateUserReadyDone(user) {
 
 function updateUsersInRoom(users) {
   const usersContainer = document.querySelector("#users-wrapper");
-  removeAllChildrens(usersContainer);
+  removeAllChildren(usersContainer);
   users.map((user) =>
     appendUserElement({
       username: user.name,
@@ -174,7 +174,7 @@ function updateUserReadyChangeBtn(user) {
 
 function updateNumberOfRooms(rooms) {
   const roomsContainer = document.querySelector("#rooms-wrapper");
-  removeAllChildrens(roomsContainer);
+  removeAllChildren(roomsContainer);
   rooms.map((room) =>
     appendRoomElement({
       name: room.name,

@@ -29,7 +29,7 @@ export const removeClass = (element, className) => {
   element.classList.remove(...classNames);
 };
 
-export function removeAllChildrens(element) {
+export function removeAllChildren(element) {
   let delChild = element.lastChild;
   while (delChild) {
     element?.removeChild(delChild);

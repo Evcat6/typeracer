@@ -1,4 +1,4 @@
-import { Players } from "../interface/players.interface";
+import { Players } from "../types/types";
 
 const getRoomsKeysArray = (map: Map<string, Players>) => {
   const rooms: any[] = [];

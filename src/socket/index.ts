@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { ErrorMessages } from "../enums/errorMessages.enum";
 import { Events } from "../enums/events.enum";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import { Players } from "../interface/players.interface";
+import { Players } from "../types/types";
 import {
   SECONDS_TIMER_BEFORE_START_GAME,
   MAXIMUM_USERS_FOR_ONE_ROOM,
@@ -298,24 +298,24 @@ export default (io: Server) => {
         }
       }
 
-      let socketetRoom = currentRoom;
+      let socketRoom = currentRoom;
 
-      const roomData = roomsDetailsMap.get(socketetRoom);
+      const roomData = roomsDetailsMap.get(socketRoom);
 
       const newRoom = removeUserInMap({
         username,
         roomData,
       });
 
-      roomsDetailsMap.set(socketetRoom, newRoom);
-      socket.leave((socketetRoom as string));
+      roomsDetailsMap.set(socketRoom, newRoom);
+      socket.leave((socketRoom as string));
       currentRoom = null;
       const newRoomData = {
-        name: socketetRoom,
+        name: socketRoom,
         players: newRoom,
       };
 
-      io.to((socketetRoom as string)).emit(
+      io.to((socketRoom as string)).emit(
         Events.UPDATE_USERS_IN_ROOM,
         newRoomData.players
       );
@@ -324,7 +324,7 @@ export default (io: Server) => {
         if (!player.ready) return;
       }
 
-      roomsToHide.push((socketetRoom as string));
+      roomsToHide.push((socketRoom as string));
 
       io.sockets.emit(Events.UPDATE_ROOMS, getRoomsArray(roomsDetailsMap));
 
@@ -334,7 +334,7 @@ export default (io: Server) => {
 
       let beforeGameTimer = setInterval(() => {
         timerCount = timerCount - 1;
-        io.to((socketetRoom as string)).emit(
+        io.to((socketRoom as string)).emit(
           Events.UPDATE_BEFORE_GAME_TIMER,
           timerCount
         );
@@ -342,7 +342,7 @@ export default (io: Server) => {
       setTimeout(() => {
         clearInterval(beforeGameTimer);
         const randomText = Math.floor(Math.random() * 7);
-        io.to((socketetRoom as string)).emit(Events.START_GAME, { randomText });
+        io.to((socketRoom as string)).emit(Events.START_GAME, { randomText });
       }, SECONDS_TIMER_BEFORE_START_GAME * 1000);
 
   });
