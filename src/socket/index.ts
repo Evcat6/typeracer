@@ -327,8 +327,10 @@ export default (io: Server) => {
         newRoomData.players
       );
 
-      for (const player of newRoom) {
-        if (!player.ready) return;
+      if(newRoom.length) {
+        for (const player of newRoom) {
+          if (!player.ready) return;
+        }
       }
 
       roomsToHide.push((socketRoom as string));
