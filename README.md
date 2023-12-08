@@ -1,4 +1,4 @@
-Starter for **HTTP, REST / WS** homework. Binary Studio Academy
+# Very Simple type racer game
 
 ## Installation
 
@@ -7,3 +7,5 @@ Starter for **HTTP, REST / WS** homework. Binary Studio Academy
 `yarn start`
 
 open http://localhost:3002/
+
+# Enjoy)
