@@ -327,7 +327,7 @@ export default (io: Server) => {
         newRoomData.players
       );
 
-      if(newRoom.length) {
+      if(newRoom?.length) {
         for (const player of newRoom) {
           if (!player.ready) return;
         }
